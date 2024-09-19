@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRoutes from "./routes/userRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from "./middleware/errorMiddleware.js";
@@ -16,7 +17,6 @@ app.use(express.json());
 
 initializeAdminUser();
 
-// Opciones de Swagger
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -42,6 +42,8 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use('/api/v1/users', userRoutes);
+
+app.use('/api/v1/admin', adminRoutes);
 
 app.use(errorHandler);
 
