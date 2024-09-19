@@ -1,5 +1,5 @@
 import express from "express";
-import {protect} from "../middleware/authMIddleware.js";
+import {protect} from "../middleware/authMiddleware.js";
 import {admin} from "../middleware/roleMiddleware.js";
 import {getAllUsers} from "../controllers/userController.js";
 import {createAdminUser} from "../controllers/adminController.js";

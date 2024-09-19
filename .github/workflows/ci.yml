@@ -46,4 +46,4 @@ jobs:
       - name: Run tests
         env:
           MONGO_URI: mongodb://localhost:27017/testdb
-        run: npm test --verbose
+        run: npm test
