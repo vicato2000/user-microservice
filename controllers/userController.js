@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
             email: user.email,
             username: user.username,
             role: user.role,
-            token: generateToken(user._id),
+            token: generateToken(user._id, user.username, user.email),
         });
     } else {
         res.status(400).json({message: 'Invalid user data'});
@@ -62,7 +62,7 @@ export const loginUser = async (req, res) => {
             surname: user.surname,
             email: user.email,
             username: user.username,
-            token: generateToken(user._id),
+            token: generateToken(user._id, user.username, user.email),
         });
     } else {
         res.status(401).json({message: 'Invalid email or password'});
@@ -81,6 +81,7 @@ export const getUserProfile = async (req, res) => {
         _id: user._id,
         name: user.name,
         surname: user.surname,
+        username: user.username,
         email: user.email,
     });
 
@@ -89,6 +90,26 @@ export const getUserProfile = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     const users = await User.find({});
     res.json(users);
+}
+
+export const changePassword = async (req, res) => {
+    debugger;
+    const user = await User.findById(req.user._id);
+
+    const {oldPassword, newPassword} = req.body;
+
+    if (oldPassword === newPassword) {
+        return res.status(400).json({message: 'The new password must be different from the old password'});
+    }
+
+    if (user && bcrypt.compareSync(oldPassword, user.password)) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        await user.save();
+        res.json({message: 'Password changed successfully'});
+    } else {
+        res.status(401).json({message: 'Invalid password'});
+    }
 }
 
 

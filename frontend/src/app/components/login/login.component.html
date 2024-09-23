@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+          <h3>{{ 'LOGIN.TITLE' | translate }}</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <!-- Email Field -->
+            <div class="form-group mb-3">
+              <label for="email" class="form-label">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
+              <input
+                id="email"
+                formControlName="email"
+                type="email"
+                class="form-control"
+                placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}"
+                required
+              />
+              <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger mt-1">
+                <small *ngIf="loginForm.get('email')?.errors?.['required']">{{ 'LOGIN.EMAIL_REQUIRED' | translate }}</small>
+                <small *ngIf="loginForm.get('email')?.errors?.['email']">{{ 'LOGIN.EMAIL_INVALID' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Password Field with Show/Hide button -->
+            <div class="form-group mb-3">
+              <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
+              <div class="input-group">
+                <input
+                  id="password"
+                  formControlName="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
+                  required
+                />
+                <button type="button" class="btn btn-outline-secondary" (click)="toggleShowPassword()">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger mt-1">
+                <small *ngIf="loginForm.get('password')?.errors?.['required']">{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</small>
+                <small *ngIf="loginForm.get('password')?.errors?.['minlength']">{{ 'LOGIN.PASSWORD_MINLENGTH' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">
+                {{ 'LOGIN.SUBMIT' | translate }}
+              </button>
+            </div>
+          </form>
+
+          <!-- Enlace al registro -->
+          <div class="text-center">
+            <p>{{ 'LOGIN.NO_ACCOUNT' | translate }} <a routerLink="/register">{{ 'LOGIN.REGISTER_LINK' | translate }}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

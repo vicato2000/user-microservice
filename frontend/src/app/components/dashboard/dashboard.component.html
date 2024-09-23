@@ -1,0 +1,47 @@
+<!-- src/app/components/dashboard/dashboard.component.html -->
+<div class="container-fluid">
+  <!-- Barra Superior -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">{{ 'DASHBOARD.BRAND' | translate }}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ username || ('DASHBOARD.DEFAULT_USER' | translate) }} <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/profile">{{ 'DASHBOARD.PROFILE' | translate }}</a></li>
+              <li><a class="dropdown-item" routerLink="/settings">{{ 'DASHBOARD.SETTINGS' | translate }}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()">{{ 'DASHBOARD.LOGOUT' | translate }}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido Principal Centrado -->
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <div class="border-bottom mb-4">
+          <h1 class="h2">{{ 'DASHBOARD.WELCOME' | translate }}</h1>
+          <div *ngIf="username" class="mb-3">
+            <p class="lead">{{ 'DASHBOARD.GREETING' | translate }} {{ username }}!</p>
+          </div>
+        </div>
+
+        <!-- Contenido Dinámico -->
+        <section>
+          <h2 class="h4">{{ 'DASHBOARD.CONTENT_TITLE' | translate }}</h2>
+          <p>{{ 'DASHBOARD.CONTENT_DESCRIPTION' | translate }}</p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

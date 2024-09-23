@@ -20,7 +20,7 @@ export const createAdminUser = async (req, res) => {
         username,
         password: await bcrypt.hash(password, salt),
         role: 'admin',
-        token: generateToken(user._id),
+        token: generateToken(user._id, user.username, user.email),
     });
 
     if (user) {
@@ -31,7 +31,7 @@ export const createAdminUser = async (req, res) => {
             email: user.email,
             username: user.username,
             role: user.role,
-            token: generateToken(user._id),
+            token: generateToken(user._id, user.username, user.email),
         });
     } else {
         res.status(400).json({ message: 'Invalid user data' });

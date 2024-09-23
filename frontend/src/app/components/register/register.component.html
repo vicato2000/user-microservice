@@ -1,0 +1,118 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+          <h3>{{ 'REGISTER.TITLE' | translate }}</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Name and Surname Fields -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="name" class="form-label">{{ 'REGISTER.NAME_LABEL' | translate }}</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  placeholder="{{ 'REGISTER.NAME_PLACEHOLDER' | translate }}"
+                  [ngClass]="{'is-invalid': registerForm.get('name')?.invalid && registerForm.get('name')?.touched}"
+                  required
+                />
+                <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="text-danger mt-1">
+                  <small *ngIf="registerForm.get('name')?.errors?.['required']">{{ 'REGISTER.NAME_REQUIRED' | translate }}</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="surname" class="form-label">{{ 'REGISTER.SURNAME_LABEL' | translate }}</label>
+                <input
+                  id="surname"
+                  formControlName="surname"
+                  type="text"
+                  class="form-control"
+                  placeholder="{{ 'REGISTER.SURNAME_PLACEHOLDER' | translate }}"
+                  [ngClass]="{'is-invalid': registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched}"
+                  required
+                />
+                <div *ngIf="registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched" class="text-danger mt-1">
+                  <small *ngIf="registerForm.get('surname')?.errors?.['required']">{{ 'REGISTER.SURNAME_REQUIRED' | translate }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
+              <input
+                id="email"
+                formControlName="email"
+                type="email"
+                class="form-control"
+                placeholder="{{ 'REGISTER.EMAIL_PLACEHOLDER' | translate }}"
+                [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}"
+                required
+              />
+              <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger mt-1">
+                <small *ngIf="registerForm.get('email')?.errors?.['required']">{{ 'REGISTER.EMAIL_REQUIRED' | translate }}</small>
+                <small *ngIf="registerForm.get('email')?.errors?.['email']">{{ 'REGISTER.EMAIL_INVALID' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Username Field -->
+            <div class="mb-3">
+              <label for="username" class="form-label">{{ 'REGISTER.USERNAME_LABEL' | translate }}</label>
+              <input
+                id="username"
+                formControlName="username"
+                type="text"
+                class="form-control"
+                placeholder="{{ 'REGISTER.USERNAME_PLACEHOLDER' | translate }}"
+                [ngClass]="{'is-invalid': registerForm.get('username')?.invalid && registerForm.get('username')?.touched}"
+                required
+              />
+              <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="text-danger mt-1">
+                <small *ngIf="registerForm.get('username')?.errors?.['required']">{{ 'REGISTER.USERNAME_REQUIRED' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Password Field with Show/Hide button -->
+            <div class="mb-3">
+              <label for="password" class="form-label">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
+              <div class="input-group">
+                <input
+                  id="password"
+                  formControlName="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  placeholder="{{ 'REGISTER.PASSWORD_PLACEHOLDER' | translate }}"
+                  [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+                  required
+                />
+                <button type="button" class="btn btn-outline-secondary" (click)="toggleShowPassword()">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger mt-1">
+                <small *ngIf="registerForm.get('password')?.errors?.['required']">{{ 'REGISTER.PASSWORD_REQUIRED' | translate }}</small>
+                <small *ngIf="registerForm.get('password')?.errors?.['minlength']">{{ 'REGISTER.PASSWORD_MINLENGTH' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">
+                {{ 'REGISTER.SUBMIT' | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

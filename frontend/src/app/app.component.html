@@ -1,0 +1,22 @@
+<!-- src/app/app.component.html -->
+<div class="container-fluid">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Footer con selector de idioma -->
+<footer class="bg-dark text-white fixed-bottom py-3">
+  <div class="container d-flex justify-content-between">
+    <div>
+      <p>&copy; 2024 Users. All rights reserved.</p>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ 'LANGUAGE' | translate }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li><a class="dropdown-item" (click)="switchLanguage('en')">English</a></li>
+        <li><a class="dropdown-item" (click)="switchLanguage('es')">Español</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

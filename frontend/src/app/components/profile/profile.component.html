@@ -1,0 +1,177 @@
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Users</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ username || 'User' }} <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+              <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow mb-5">
+          <div class="card-header bg-primary text-white">
+            <h3>{{ 'PROFILE.UPDATE_PROFILE' | translate }}</h3>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="name" class="form-label">{{ 'PROFILE.NAME' | translate }}</label>
+                  <input
+                    id="name"
+                    formControlName="name"
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.NAME_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="surname" class="form-label">{{ 'PROFILE.SURNAME' | translate }}</label>
+                  <input
+                    id="surname"
+                    formControlName="surname"
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.SURNAME_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="username" class="form-label">{{ 'PROFILE.USERNAME' | translate }}</label>
+                  <input
+                    id="username"
+                    formControlName="username"
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.USERNAME_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">{{ 'PROFILE.EMAIL' | translate }}</label>
+                  <input
+                    id="email"
+                    formControlName="email"
+                    type="email"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.EMAIL_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="d-grid mb-4">
+                <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">
+                  {{ 'PROFILE.SAVE_CHANGES' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card shadow">
+          <div class="card-header bg-warning text-dark">
+            <h3>{{ 'PROFILE.CHANGE_PASSWORD' | translate }}</h3>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+              <div class="mb-3">
+                <label for="currentPassword" class="form-label">{{ 'PROFILE.CURRENT_PASSWORD' | translate }}</label>
+                <div class="input-group">
+                  <input
+                    id="currentPassword"
+                    formControlName="currentPassword"
+                    [type]="showCurrentPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.CURRENT_PASSWORD_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                  <button type="button" class="btn btn-outline-secondary" (click)="toggleCurrentPassword()">
+                    <i class="bi" [ngClass]="showCurrentPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">{{ 'PROFILE.NEW_PASSWORD' | translate }}</label>
+                <div class="input-group">
+                  <input
+                    id="newPassword"
+                    formControlName="newPassword"
+                    [type]="showNewPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.NEW_PASSWORD_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                  <button type="button" class="btn btn-outline-secondary" (click)="toggleNewPassword()">
+                    <i class="bi" [ngClass]="showNewPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">{{ 'PROFILE.CONFIRM_PASSWORD' | translate }}</label>
+                <div class="input-group">
+                  <input
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="{{ 'PROFILE.CONFIRM_PASSWORD_PLACEHOLDER' | translate }}"
+                    required
+                  />
+                  <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
+                    <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="passwordMismatch" class="alert alert-danger">
+                {{ 'PROFILE.PASSWORD_MISMATCH' | translate }}
+              </div>
+
+              <div *ngIf="currentPasswordIncorrect" class="alert alert-danger">
+                {{ 'PROFILE.CURRENT_PASSWORD_INCORRECT' | translate }}
+              </div>
+
+              <div *ngIf="passwordChangeSuccess" class="alert alert-success">
+                {{ 'PROFILE.PASSWORD_CHANGE_SUCCESS' | translate }}
+              </div>
+              <div *ngIf="passwordNotSame" class="alert alert-danger">
+                {{ 'PROFILE.PASSWORD_NOT_SAME' | translate }}
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-warning" [disabled]="!passwordForm.valid || passwordMismatch">
+                  {{ 'PROFILE.CHANGE_PASSWORD_BTN' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

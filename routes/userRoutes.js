@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, getUserProfile } from '../controllers/userController.js';
+import { registerUser, loginUser, getUserProfile, changePassword } from '../controllers/userController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { check } from 'express-validator';
 
@@ -190,6 +190,8 @@ router.post(
  */
 router.get('/profile', protect, getUserProfile);
 
+
+router.put('/password', protect, changePassword) 
 
 
 export default router;
