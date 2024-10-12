@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import auditRouter from "./routes/auditRouter.js";
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from "./middleware/errorMiddleware.js";
@@ -46,6 +47,9 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api/v1/users', userRoutes);
 
 app.use('/api/v1/admin', adminRoutes);
+
+app.use('/api/v1/audit', auditRouter);
+
 
 app.use(errorHandler);
 

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
+import Audit from "../models/Audit.js";
 
 
 export const initializeAdminUser = async () => {
@@ -22,11 +23,24 @@ export const initializeAdminUser = async () => {
                 role: 'admin',
             });
 
+            // await Audit.create({
+            //     userId: newAdmin._id,
+            //     changedBy: newAdmin._id,
+            //     changeType: 'create',
+            //     changes: {
+            //         name: newAdmin.name,
+            //         surname: newAdmin.surname,
+            //         email: newAdmin.email,
+            //         username: newAdmin.username,
+            //         role: newAdmin.role,
+            //     }
+            // });
+
             console.log(`Usuario admin creado: ${newAdmin.email}`);
         } else {
             console.log('El usuario admin ya existe');
         }
     } catch (error) {
-        console.error(`Error al crear el usuario admin: ${error.message}`);
+        console.error(`Error al crear el usuario admin: ${error}`);
     }
 };

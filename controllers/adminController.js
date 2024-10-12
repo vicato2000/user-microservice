@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+import Audit from "../models/Audit.js";
 
 export const createAdminUser = async (req, res) => {
     const { name, surname, email, username, password } = req.body;
@@ -37,3 +38,86 @@ export const createAdminUser = async (req, res) => {
         res.status(400).json({ message: 'Invalid user data' });
     }
 }
+
+export const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        await user.remove();
+
+        await Audit.create({
+            userId: user._id,
+            changedBy: req.user._id,
+            changeType: 'delete',
+            changes: {
+                name: user.name,
+                surname: user.surname,
+                email: user.email,
+                username: user.username,
+                role: user.role,
+            },
+        });
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting user: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const getAudits = async (req, res) => {
+    try {
+        const audits = await Audit.find({}).populate('userId').populate('changedBy');
+        res.json(audits);
+    } catch (error) {
+        console.error(`Error retrieving audits: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const updateUserRole = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { role } = req.body;
+        if (!['user', 'admin'].includes(role)) {
+            return res.status(400).json({ message: 'Invalid role' });
+        }
+
+        user.role = role;
+        await user.save();
+
+        await Audit.create({
+            userId: user._id,
+            changedBy: req.user._id,
+            changeType: 'update',
+            changes: { role },
+        });
+
+        res.json({ message: 'User role updated successfully' });
+    } catch (error) {
+        console.error(`Error updating user role: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const checkAdminUser = async (req, res) => {
+    try {
+        // Obtener el usuario autenticado desde el token (req.user)
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ isAdmin: user.role === 'admin' });
+    } catch (error) {
+        console.error(`Error checking admin user: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

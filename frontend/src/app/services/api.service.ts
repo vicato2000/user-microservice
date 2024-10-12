@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../enviroments/environments';
 
@@ -8,7 +8,7 @@ import {environment} from '../../enviroments/environments';
 })
 export class ApiService {
 
-  private apiUrl = environment.apiUrl;  // URL de tu backend
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -20,8 +20,11 @@ export class ApiService {
     });
   }
 
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`);
+  getAllUsers(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/admin/users`, { headers });
   }
 
   registerUser(userData: any): Observable<any> {
@@ -46,5 +49,25 @@ export class ApiService {
         Authorization: `Bearer ${token}`
       }
     });
+  }
+
+  deleteUserAccount(password: string, token: any): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/users/delete`, { password }, { headers });
+  }
+
+  checkAdminUser(token: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin/users/check-admin`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  deleteUserAdmin(userId: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/admin/users/${userId}`, { headers });
   }
 }

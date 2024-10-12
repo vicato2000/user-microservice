@@ -69,6 +69,13 @@
     "CHANGE_PASSWORD_BTN": "Change Password",
     "PASSWORD_NOT_SAME": "Password should be different from de current one",
     "PASSWORD_CHANGE_SUCCESS": "Password changed successfully",
-    "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect"
+    "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect",
+    "EMAIL_EXISTS": "Email already exists",
+    "USERNAME_EXISTS": "Username already exists",
+    "UPDATE_SUCCESS": "Profile updated successfully",
+    "DELETE_ACCOUNT": "Delete Account",
+    "DELETE_ACCOUNT_PASSWORD": "Enter your password to delete your account",
+    "DELETE_ACCOUNT_PASSWORD_PLACEHOLDER": "Enter your password",
+    "DELETE_ACCOUNT_BUTTON": "Delete Account"
   }
 }

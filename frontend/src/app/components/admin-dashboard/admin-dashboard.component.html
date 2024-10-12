@@ -1,0 +1,30 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Admin Dashboard - Manage Users</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <table class="table table-hover table-bordered">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Username</th>
+      <th scope="col">Role</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.name }} {{ user.surname }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <button class="btn btn-danger btn-sm" (click)="deleteUser(user._id)">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

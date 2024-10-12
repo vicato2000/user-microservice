@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -23,6 +24,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginComponent,
     DashboardComponent,
     ProfileComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
