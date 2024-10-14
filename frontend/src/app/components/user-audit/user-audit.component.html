@@ -1,0 +1,55 @@
+<div class="container-fluid">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Admin Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ username || 'User' }} <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/profile">{{ 'ADMIN_DASHBOARD.NAV_PROFILE' | translate }}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()">{{ 'ADMIN_DASHBOARD.NAV_LOGOUT' | translate }}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2>User Audit Logs</h2>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th>Change Type</th>
+        <th>Changed By</th>
+        <th>Changes</th>
+        <th>Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let log of auditLogs">
+        <td>{{ log.changeType }}</td>
+        <td>{{ log.changedBy.username }}</td>
+        <td>
+          <pre>{{ log.changes | json }}</pre>
+        </td>
+        <td>{{ log.createdAt | date:'short' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import {initializeUsers} from "../utils/initializeAdmin.js";
 
 dotenv.config({ path: '../.env.test' }); // Cargar el archivo .env.test
 
@@ -16,11 +17,12 @@ beforeAll(async () => {
     const collections = mongoose.connection.collections;
     for (const key in collections) {
         const collection = collections[key];
-        await collection.deleteMany({}); // Eliminar documentos de las colecciones
+        await collection.deleteMany({});
     }
+    await initializeUsers();
 });
 
 afterAll(async () => {
-    await mongoose.connection.dropDatabase(); // Eliminar la base de datos de pruebas
-    await mongoose.connection.close(); // Cerrar la conexión
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
 });

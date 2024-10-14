@@ -30,13 +30,24 @@ const userSchema = mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
+    resetPasswordToken: {
+        type: String,
+    },
+    resetPasswordExpire: {
+        type: Date,
+    }
 }, {
     timestamps: true,
 });
 
+userSchema.pre('save', async function (next) {
+    this.wasNew = this.isNew;
+    next();
+});
+
 userSchema.post('save', async function (doc, next){
 
-    const changeType = doc.isNew ? 'create' : 'update';
+    const changeType = doc.wasNew ? 'create' : 'update';
 
     const auditEntry = {
         userId: doc._id,

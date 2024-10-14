@@ -5,7 +5,7 @@ import {
     getUserProfile,
     changePassword,
     updateUser,
-    deleteUserAccount
+    deleteUserAccount, forgotPassword, resetPassword
 } from '../controllers/userController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { check } from 'express-validator';
@@ -332,6 +332,10 @@ router.put('/profile', protect, updateUser);
  *         description: Server error
  */
 router.post('/delete', protect, deleteUserAccount);
+
+router.post('/forgot-password', forgotPassword);
+
+router.post('/reset-password/:token', resetPassword);
 
 
 export default router;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../enviroments/environments';
+import {ɵFormGroupValue, ɵTypedOrUntyped} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,22 @@ export class ApiService {
     });
   }
 
-  getAllUsers(token: string): Observable<any> {
+  updateUserRole(userId: string, role: string, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get(`${this.apiUrl}/admin/users`, { headers });
+    return this.http.put(`${this.apiUrl}/admin/users/${userId}/role`, { role }, { headers });
+  }
+
+  getAllUsersPaginated(page: number, pageSize: number, token: string, search?: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    let url = `${this.apiUrl}/admin/users?page=${page}&pageSize=${pageSize}`;
+    if (search) {
+      url += `&search=${search}`;
+    }
+    return this.http.get(url, { headers });
   }
 
   registerUser(userData: any): Observable<any> {
@@ -69,5 +81,22 @@ export class ApiService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.delete(`${this.apiUrl}/admin/users/${userId}`, { headers });
+  }
+
+  getUserAuditLogs(userId: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/admin/users/${userId}/audits`, { headers });
+  }
+
+  // Solicita un email para restablecer la contraseña
+  forgotPassword(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/forgot-password`, data);
+  }
+
+  // Restablece la contraseña con el token recibido
+  resetPassword(token: string, data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/reset-password/${token}`, data);
   }
 }

@@ -4,6 +4,8 @@ import generateToken from '../utils/generateToken.js';
 import bcrypt from 'bcryptjs';
 import {validationResult} from "express-validator";
 import Audit from "../models/Audit.js";
+import sgMail from '@sendgrid/mail';
+import crypto from 'crypto';
 
 export const registerUser = async (req, res) => {
     const errors = validationResult(req);
@@ -89,9 +91,32 @@ export const getUserProfile = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
-    const users = await User.find({});
-    res.json(users);
-}
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = req.query.search || '';
+
+    const query = {
+        $or: [
+            { email: { $regex: search, $options: 'i' } },
+            { username: { $regex: search, $options: 'i' } },
+        ],
+    };
+
+    const users = await User.find(query)
+        .limit(limit)
+        .skip(limit * (page - 1));
+
+    const totalUsers = await User.countDocuments(query);
+
+    console.log('totalUsers', totalUsers);
+
+    res.json({
+        users,
+        page,
+        totalPages: Math.ceil(totalUsers / limit),
+        totalUsers,
+    });
+};
 
 export const changePassword = async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -154,22 +179,18 @@ export const deleteUserAccount = async (req, res) => {
         const userId = req.user._id;
         const { password } = req.body;
 
-        // Encuentra al usuario
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Verifica la contraseña proporcionada
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
-        // Elimina la cuenta del usuario
         await User.findByIdAndDelete(userId);
 
-        // Registra la auditoría de la eliminación de cuenta
         await Audit.create({
             userId: user._id,
             changedBy: user._id,
@@ -187,6 +208,74 @@ export const deleteUserAccount = async (req, res) => {
         res.json({ message: 'User account deleted successfully' });
     } catch (error) {
         console.error(`Error deleting user account: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+
+export const forgotPassword = async (req, res) => {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'No user found with that email' });
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const resetTokenExpire = Date.now() + 3600000; // Expira en 1 hora
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpire = resetTokenExpire;
+        await user.save();
+
+        const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+        const message = {
+            to: user.email,
+            from: "viccamtoc@alum.us.es",
+            subject: 'Password Reset Request',
+            html: `<h1>Password Reset</h1>
+                   <p>You requested a password reset</p>
+                   <p>Please click on this <a href="${resetUrl}">link</a> to reset your password.</p>`,
+        };
+
+        await sgMail.send(message);
+
+        res.status(200).json({ message: 'Email sent for password reset' });
+    } catch (error) {
+        console.error(`Error in forgot password: ${error}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpire: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error(`Error in reset password: ${error}`);
         res.status(500).json({ message: 'Server error' });
     }
 };

@@ -1,6 +1,5 @@
 import Audit from '../models/Audit.js';
 
-// Obtener todos los registros de auditoría de un usuario específico
 export const getUserAuditLogs = async (req, res) => {
     try {
         const { userId } = req.params;

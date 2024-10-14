@@ -3,5 +3,8 @@ export default {
     testEnvironment: 'node',
     setupFilesAfterEnv: ['./tests/setup.js'],
     testTimeout: 30000,
-    transform: {},
+    transform: {
+        '^.+\\.tsx?$': 'ts-jest'
+    },
+    roots: ['./tests'],
 };

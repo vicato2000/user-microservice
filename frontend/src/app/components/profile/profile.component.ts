@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
   deleteAccountForm!: FormGroup;
   deleteErrorMessage: string = '';
   showDeletePassword: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private fb: FormBuilder, private apiService: ApiService) {}
 
@@ -78,6 +79,14 @@ export class ProfileComponent implements OnInit {
           }
         }
       );
+      this.apiService.checkAdminUser(token).pipe(
+        catchError(error => {
+          console.error('Error checking admin status', error);
+          return of({ isAdmin: false });
+        })
+      ).subscribe((response: any) => {
+        this.isAdmin = response.isAdmin;
+      });
     } else {
       this.errorMessage = 'No token found. Please log in again.';
     }

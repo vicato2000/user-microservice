@@ -8,7 +8,7 @@ export const createAdminUser = async (req, res) => {
 
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-        return res.status(400).json({ message: 'User already exists w' })
+        return res.status(400).json({ message: 'User already exists' })
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -21,8 +21,11 @@ export const createAdminUser = async (req, res) => {
         username,
         password: await bcrypt.hash(password, salt),
         role: 'admin',
-        token: generateToken(user._id, user.username, user.email),
+        token: '',
     });
+
+    user.token = generateToken(user._id, user.username, user.email);
+    await user.save();
 
     if (user) {
         res.status(201).json({
@@ -37,7 +40,7 @@ export const createAdminUser = async (req, res) => {
     } else {
         res.status(400).json({ message: 'Invalid user data' });
     }
-}
+};
 
 export const deleteUser = async (req, res) => {
     try {
@@ -46,7 +49,7 @@ export const deleteUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        await user.remove();
+        await user.deleteOne();
 
         await Audit.create({
             userId: user._id,
@@ -78,6 +81,21 @@ export const getAudits = async (req, res) => {
     }
 };
 
+
+export const checkAdminUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ isAdmin: user.role === 'admin' });
+    } catch (error) {
+        console.error(`Error checking admin user: ${error.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 export const updateUserRole = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -93,12 +111,13 @@ export const updateUserRole = async (req, res) => {
         user.role = role;
         await user.save();
 
-        await Audit.create({
-            userId: user._id,
-            changedBy: req.user._id,
-            changeType: 'update',
-            changes: { role },
-        });
+        // // Registrar auditoría de cambio de rol
+        // await Audit.create({
+        //     userId: user._id,
+        //     changedBy: req.user._id, // Admin que hizo el cambio
+        //     changeType: 'update',
+        //     changes: { role },
+        // });
 
         res.json({ message: 'User role updated successfully' });
     } catch (error) {
@@ -107,17 +126,21 @@ export const updateUserRole = async (req, res) => {
     }
 };
 
-export const checkAdminUser = async (req, res) => {
+export const getUserAudits = async (req, res) => {
     try {
-        // Obtener el usuario autenticado desde el token (req.user)
-        const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        const userId = req.params.id;
+
+        const audits = await Audit.find({ userId }).sort({ createdAt: -1 });
+        if (!audits || audits.length === 0) {
+            return res.status(404).json({ message: 'No audit logs found for this user' });
         }
 
-        res.json({ isAdmin: user.role === 'admin' });
+        console.log(audits);
+
+        res.json(audits);
     } catch (error) {
-        console.error(`Error checking admin user: ${error.message}`);
+        console.error(`Error retrieving audit logs: ${error.message}`);
         res.status(500).json({ message: 'Server error' });
     }
 };
+

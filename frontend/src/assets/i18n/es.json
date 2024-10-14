@@ -11,7 +11,8 @@
     "PASSWORD_MINLENGTH": "La contraseña debe tener al menos 6 caracteres.",
     "SUBMIT": "Iniciar Sesión",
     "NO_ACCOUNT": "¿No tienes una cuenta?",
-    "REGISTER_LINK": "Regístrate aquí"
+    "REGISTER_LINK": "Regístrate aquí",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?"
   },
   "LANGUAGE": "Idioma",
   "REGISTER": {
@@ -39,7 +40,7 @@
     "BRAND": "Usuarios",
     "DEFAULT_USER": "Usuario",
     "PROFILE": "Perfil",
-    "SETTINGS": "Configuraciones",
+    "ADMIN": "Administrador",
     "LOGOUT": "Cerrar sesión",
     "WELCOME": "Bienvenido a tu Panel de Control",
     "GREETING": "Hola",
@@ -77,5 +78,41 @@
     "DELETE_ACCOUNT_PASSWORD": "Introduce tu contraseña para eliminar tu cuenta",
     "DELETE_ACCOUNT_PASSWORD_PLACEHOLDER": "Introduce tu contraseña",
     "DELETE_ACCOUNT_BUTTON": "Eliminar Cuenta"
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Panel de Administración - Gestionar Usuarios",
+    "SEARCH_PLACEHOLDER": "Buscar por nombre de usuario o correo electrónico",
+    "SEARCH_BUTTON": "Buscar",
+    "NAME": "Nombre",
+    "EMAIL": "Correo electrónico",
+    "USERNAME": "Nombre de usuario",
+    "ROLE": "Rol",
+    "ACTIONS": "Acciones",
+    "VIEW_AUDIT_LOGS": "Ver Registros de Auditoría",
+    "DELETE": "Eliminar",
+    "PREVIOUS_PAGE": "Anterior",
+    "NEXT_PAGE": "Siguiente",
+    "PAGE_INFO": "Página {{currentPage}} de {{totalPages}}",
+    "NAV_PROFILE": "Perfil",
+    "NAV_LOGOUT": "Cerrar sesión"
+
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "¿Olvidaste tu Contraseña?",
+    "EMAIL_LABEL": "Correo Electrónico:",
+    "EMAIL_PLACEHOLDER": "Introduce tu correo electrónico",
+    "EMAIL_REQUIRED": "El correo electrónico es obligatorio.",
+    "EMAIL_INVALID": "Por favor introduce un correo electrónico válido.",
+    "SUBMIT": "Enviar",
+    "BACK_TO_LOGIN": "Volver a Iniciar Sesión"
+  },
+  "RESET_PASSWORD": {
+    "TITLE": "Restablecer Contraseña",
+    "NEW_PASSWORD_LABEL": "Nueva Contraseña:",
+    "NEW_PASSWORD_PLACEHOLDER": "Introduce tu nueva contraseña",
+    "NEW_PASSWORD_REQUIRED": "La nueva contraseña es obligatoria.",
+    "CONFIRM_PASSWORD_LABEL": "Confirmar Nueva Contraseña:",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirma tu nueva contraseña",
+    "CONFIRM_PASSWORD_REQUIRED": "Confirmar nueva contraseña es obligatorio."
   }
 }

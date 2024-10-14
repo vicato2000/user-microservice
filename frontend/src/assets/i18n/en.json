@@ -11,7 +11,8 @@
     "PASSWORD_MINLENGTH": "Password must be at least 6 characters.",
     "SUBMIT": "Login",
     "NO_ACCOUNT": "Don't have an account?",
-    "REGISTER_LINK": "Register here"
+    "REGISTER_LINK": "Register here",
+    "FORGOT_PASSWORD": "Forgot your password?"
   },
   "LANGUAGE": "Language",
   "REGISTER": {
@@ -39,7 +40,7 @@
     "BRAND": "Users",
     "DEFAULT_USER": "User",
     "PROFILE": "Profile",
-    "SETTINGS": "Settings",
+    "ADMIN": "Admin",
     "LOGOUT": "Logout",
     "WELCOME": "Welcome to your Dashboard",
     "GREETING": "Hello",
@@ -77,5 +78,42 @@
     "DELETE_ACCOUNT_PASSWORD": "Enter your password to delete your account",
     "DELETE_ACCOUNT_PASSWORD_PLACEHOLDER": "Enter your password",
     "DELETE_ACCOUNT_BUTTON": "Delete Account"
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Admin Dashboard - Manage Users",
+    "SEARCH_PLACEHOLDER": "Search by username or email",
+    "SEARCH_BUTTON": "Search",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "USERNAME": "Username",
+    "ROLE": "Role",
+    "ACTIONS": "Actions",
+    "VIEW_AUDIT_LOGS": "View Audit Logs",
+    "DELETE": "Delete",
+    "PREVIOUS_PAGE": "Previous",
+    "NEXT_PAGE": "Next",
+    "PAGE_INFO": "Page {{currentPage}} of {{totalPages}}",
+    "NAV_PROFILE": "Profile",
+    "NAV_LOGOUT": "Logout"
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Forgot Password",
+    "EMAIL_LABEL": "Email:",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "EMAIL_REQUIRED": "Email is required.",
+    "EMAIL_INVALID": "Please enter a valid email.",
+    "SUBMIT": "Submit",
+    "BACK_TO_LOGIN": "Back to Login"
+  },
+  "RESET_PASSWORD": {
+    "TITLE": "Reset Password",
+    "NEW_PASSWORD_LABEL": "New Password:",
+    "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
+    "NEW_PASSWORD_REQUIRED": "New password is required.",
+    "CONFIRM_PASSWORD_LABEL": "Confirm New Password:",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirm your new password",
+    "CONFIRM_PASSWORD_REQUIRED": "Confirm new password is required.",
+    "PASSWORD_MISMATCH": "Passwords do not match",
+    "SUBMIT": "Submit"
   }
 }

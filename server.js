@@ -8,7 +8,7 @@ import auditRouter from "./routes/auditRouter.js";
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from "./middleware/errorMiddleware.js";
-import {initializeAdminUser} from "./utils/initializeAdmin.js";
+import {initializeUsers} from "./utils/initializeAdmin.js";
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-initializeAdminUser();
+initializeUsers();
 
 const swaggerOptions = {
     swaggerDefinition: {

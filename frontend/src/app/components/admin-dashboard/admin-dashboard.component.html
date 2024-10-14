@@ -1,30 +1,80 @@
-<div class="container mt-5">
-  <h2 class="mb-4">Admin Dashboard - Manage Users</h2>
+<div class="container-fluid">
+  <!-- Barra Superior -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Admin Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ username || 'User' }} <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/profile">{{ 'ADMIN_DASHBOARD.NAV_PROFILE' | translate }}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()">{{ 'ADMIN_DASHBOARD.NAV_LOGOUT' | translate }}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <!-- Contenido Principal del Panel de Administración -->
+  <div class="container mt-5">
+    <h2 class="mb-4">{{ 'ADMIN_DASHBOARD.TITLE' | translate }}</h2>
 
-  <table class="table table-hover table-bordered">
-    <thead class="thead-dark">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Username</th>
-      <th scope="col">Role</th>
-      <th scope="col">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.name }} {{ user.surname }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.username }}</td>
-      <td>{{ user.role }}</td>
-      <td>
-        <button class="btn btn-danger btn-sm" (click)="deleteUser(user._id)">
-          <i class="bi bi-trash"></i> Delete
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    <!-- Barra de búsqueda -->
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="{{ 'ADMIN_DASHBOARD.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchQuery" (keyup.enter)="searchUsers()" />
+      <button class="btn btn-primary mt-2" (click)="searchUsers()">{{ 'ADMIN_DASHBOARD.SEARCH_BUTTON' | translate }}</button>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <!-- Tabla de usuarios -->
+    <table class="table table-hover table-bordered">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">{{ 'ADMIN_DASHBOARD.NAME' | translate }}</th>
+        <th scope="col">{{ 'ADMIN_DASHBOARD.EMAIL' | translate }}</th>
+        <th scope="col">{{ 'ADMIN_DASHBOARD.USERNAME' | translate }}</th>
+        <th scope="col">{{ 'ADMIN_DASHBOARD.ROLE' | translate }}</th>
+        <th scope="col">{{ 'ADMIN_DASHBOARD.ACTIONS' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }} {{ user.surname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
+        <td>
+          <select class="form-select" [(ngModel)]="user.role" (change)="changeUserRole(user._id, user.role)">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn btn-primary btn-sm" [routerLink]="['/admin/users', user._id, 'audits']">
+            {{ 'ADMIN_DASHBOARD.VIEW_AUDIT_LOGS' | translate }}
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteUser(user._id)">
+            {{ 'ADMIN_DASHBOARD.DELETE' | translate }}
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-between mt-3">
+      <button class="btn btn-secondary" (click)="prevPage()" [disabled]="currentPage === 1">{{ 'ADMIN_DASHBOARD.PREVIOUS_PAGE' | translate }}</button>
+      <span>{{ 'ADMIN_DASHBOARD.PAGE_INFO' | translate: {currentPage: currentPage, totalPages: totalPages} }}</span>
+      <button class="btn btn-secondary" (click)="nextPage()" [disabled]="currentPage === totalPages">{{ 'ADMIN_DASHBOARD.NEXT_PAGE' | translate }}</button>
+    </div>
+  </div>
 </div>

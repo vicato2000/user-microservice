@@ -15,7 +15,9 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" routerLink="/profile">{{ 'DASHBOARD.PROFILE' | translate }}</a></li>
-              <li><a class="dropdown-item" routerLink="/settings">{{ 'DASHBOARD.SETTINGS' | translate }}</a></li>
+              <li *ngIf="isAdmin">
+                <a class="dropdown-item" routerLink="/admin">{{ 'DASHBOARD.ADMIN' | translate }}</a>
+              </li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="logout()">{{ 'DASHBOARD.LOGOUT' | translate }}</a></li>
             </ul>
