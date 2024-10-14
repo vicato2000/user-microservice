@@ -19,7 +19,7 @@ beforeAll(async () => {
         const collection = collections[key];
         await collection.deleteMany({});
     }
-    await initializeUsers();
+    // await initializeUsers();
 });
 
 afterAll(async () => {

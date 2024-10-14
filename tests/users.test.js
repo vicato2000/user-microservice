@@ -1,6 +1,6 @@
 // tests/users.test.js
 import request from 'supertest';
-import app from '../server.js'; // Asegúrate de importar tu servidor Express
+import app from '../server.js';
 
 let userToken;
 let userId;

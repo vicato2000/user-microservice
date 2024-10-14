@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-initializeUsers();
+await initializeUsers();
 
 const swaggerOptions = {
     swaggerDefinition: {

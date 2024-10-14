@@ -14,7 +14,7 @@ describe('Admin Controller Tests', () => {
                 password: 'admin123',
             });
 
-        adminToken = res.body.token;
+        adminToken = res.body;
         console.log('Admin token:', adminToken);
 
         const res2 = await request(app)
@@ -40,6 +40,8 @@ describe('Admin Controller Tests', () => {
                 username: 'newadminuser',
                 password: 'adminpassword'
             });
+        console.log('Admin token:', adminToken);
+
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toHaveProperty('token');
