@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5000/api/v1',  // URL de la API en producción
+  apiUrl: 'user-microservice-production-0d00.up.railway.app',  // URL de la API en producción
 };
