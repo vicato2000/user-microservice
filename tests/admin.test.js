@@ -1,12 +1,20 @@
 import request from 'supertest';
-import app from '../server.js'; // Asegúrate de apuntar al archivo del servidor
+import { app, server } from '../server.js';
 import User from '../models/User.js';
 import mongoose from 'mongoose';
+import {initializeUsers} from "../utils/initializeAdmin.js";
 
 describe('Admin Controller Tests', () => {
     let adminToken, userToken, userId, adminId;
+    let testServer;
 
     beforeAll(async () => {
+
+        await initializeUsers();
+
+
+        let testServer = app.listen(5001);
+
         const res = await request(app)
             .post('/api/v1/users/login')
             .send({
@@ -14,7 +22,7 @@ describe('Admin Controller Tests', () => {
                 password: 'admin123',
             });
 
-        adminToken = res.body;
+        adminToken = res.body.token;
         console.log('Admin token:', adminToken);
 
         const res2 = await request(app)
@@ -28,8 +36,28 @@ describe('Admin Controller Tests', () => {
         userId = res2.body._id;
     });
 
+    // afterAll((done) => {
+    //     testServer.close(() => {
+    //         console.log('Server closed');
+    //         done();
+    //     });
+    // });
+
 
     it('should create a new admin user', async () => {
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
         const res = await request(app)
             .post('/api/v1/admin/users/create-admin')
             .set('Authorization', `Bearer ${adminToken}`)
@@ -40,7 +68,7 @@ describe('Admin Controller Tests', () => {
                 username: 'newadminuser',
                 password: 'adminpassword'
             });
-        console.log('Admin token:', adminToken);
+        console.log('Admin user:', res.body);
 
 
         expect(res.statusCode).toEqual(201);
@@ -49,6 +77,19 @@ describe('Admin Controller Tests', () => {
     });
 
     it('should not allow duplicate admin creation', async () => {
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
         const res = await request(app)
             .post('/api/v1/admin/users/create-admin')
             .set('Authorization', `Bearer ${adminToken}`)
@@ -65,6 +106,31 @@ describe('Admin Controller Tests', () => {
     });
 
     it('should update user role', async () => {
+
+        // john.doe@example.com
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
+        const res2 = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'john.doe@example.com',
+                password: 'password123',
+            });
+
+        userToken = res2.body.token;
+        userId = res2.body._id;
+
         const res = await request(app)
             .put(`/api/v1/admin/users/${userId}/role`)
             .set('Authorization', `Bearer ${adminToken}`)
@@ -79,6 +145,19 @@ describe('Admin Controller Tests', () => {
     });
 
     it('should get all audits', async () => {
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
         const res = await request(app)
             .get('/api/v1/admin/audits')
             .set('Authorization', `Bearer ${adminToken}`);
@@ -88,6 +167,21 @@ describe('Admin Controller Tests', () => {
     });
 
     it('should check if a user is admin', async () => {
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
+
+
         const res = await request(app)
             .get('/api/v1/admin/users/check-admin')
             .set('Authorization', `Bearer ${adminToken}`);
@@ -98,8 +192,31 @@ describe('Admin Controller Tests', () => {
 
 
     it('should return audits for a specific user', async () => {
+
+        await initializeUsers();
+
+
+        const pres = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'admin123',
+            });
+
+        adminToken = pres.body.token;
+
+        const res2 = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: 'john.doe@example.com',
+                password: 'password123',
+            });
+
+        userToken = res2.body.token;
+        userId = res2.body._id;
+
         const res = await request(app)
-            .get(`/api/v1/admin/users/${adminId}/audits`)
+            .get(`/api/v1/admin/users/${userId}/audits`)
             .set('Authorization', `Bearer ${adminToken}`);
 
         expect(res.statusCode).toEqual(200);

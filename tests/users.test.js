@@ -1,11 +1,25 @@
 // tests/users.test.js
 import request from 'supertest';
-import app from '../server.js';
+import { app, server} from '../server.js';
 
 let userToken;
 let userId;
 
 describe('User API tests', () => {
+
+    let testServer;
+
+    beforeAll(async () => {
+        testServer = app.listen(5002);
+    });
+
+    // afterAll((done) => {
+    //     testServer.close(() => {
+    //         console.log('Server closed');
+    //         done();
+    //     });
+    // });
+
     it('should register a new user', async () => {
         const res = await request(app)
             .post('/api/v1/users/register')

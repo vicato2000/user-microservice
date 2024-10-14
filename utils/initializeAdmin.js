@@ -4,6 +4,7 @@ import Audit from "../models/Audit.js";
 
 
 export const initializeUsers = async () => {
+
     try {
         const defaultUsers = [
             { name: 'Admin', surname: 'User', email: 'admin@example.com', username: 'admin', password: 'admin123', role: 'admin' },
