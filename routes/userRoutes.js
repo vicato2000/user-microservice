@@ -333,8 +333,66 @@ router.put('/profile', protect, updateUser);
  */
 router.post('/delete', protect, deleteUserAccount);
 
+/**
+ * @swagger
+ * /api/v1/users/forgot-password:
+ *   post:
+ *     summary: Solicitar restablecimiento de contraseña
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *           example:
+ *             email: "user@example.com"
+ *     responses:
+ *       200:
+ *         description: Email de recuperación enviado exitosamente
+ *       400:
+ *         description: Correo no registrado
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/forgot-password', forgotPassword);
 
+
+/**
+ * @swagger
+ * /api/v1/users/reset-password/{token}:
+ *   post:
+ *     summary: Restablecer contraseña usando token de recuperación
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         description: Token para restablecer la contraseña generado previamente
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *           example:
+ *             password: "newPassword123"
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida exitosamente
+ *       400:
+ *         description: Token inválido o ha expirado
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/reset-password/:token', resetPassword);
 
 
